@@ -118,26 +118,26 @@
                                         ✕
                                     </button>
                                     <label>
-                                        Title:
+                                        Title
                                         <input 
                                             type="text" 
                                             bind:value={editTitle}
-                                            placeholder="Title"
+                                            placeholder="Enter title"
                                         />
                                     </label>
                                     <label>
-                                        Author:
+                                        Author
                                         <input 
                                             type="text" 
                                             bind:value={editAuthor}
-                                            placeholder="Author"
+                                            placeholder="Enter author"
                                         />
                                     </label>
                                     <label>
-                                        Description:
+                                        Description
                                         <textarea 
                                             bind:value={editDescription}
-                                            placeholder="Description"
+                                            placeholder="Enter description"
                                         ></textarea>
                                     </label>
                                     <div class="edit-actions">

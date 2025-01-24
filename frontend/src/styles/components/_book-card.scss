@@ -18,8 +18,157 @@
 
     .book-content {
         position: relative;
-        padding-top: 35px;
+        padding-top: 15px;
         text-align: left;
+
+        .edit-form {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0 $spacing-xs;
+
+            label {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                font-size: 0.8rem;
+                color: $color-text-light;
+                line-height: 1;
+                margin-top: 2px;
+                margin-bottom: 0;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+
+            input, textarea {
+                width: 100%;
+                padding: 1px 6px;
+                border: 1px solid $color-border;
+                border-radius: $border-radius;
+                font-size: 0.9rem;
+                background: $color-background;
+                color: $color-text;
+                line-height: 1.2;
+                margin-top: 1px;
+
+                &:focus {
+                    outline: none;
+                    border-color: $color-highlight;
+                }
+            }
+
+            textarea {
+                height: 32px;
+                resize: none;
+                line-height: 1.2;
+            }
+
+            .edit-button {
+                position: absolute;
+                top: -30px;
+                right: 0;
+                width: 30px;
+                height: 30px;
+                padding: 0;
+                margin: 0;
+                background: none;
+                border: none;
+                cursor: pointer;
+                border-radius: 4px;
+                font-size: 16px;
+                text-align: center;
+                line-height: 30px;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+            }
+
+            .edit-actions {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 2px;
+
+                .save-button {
+                    padding: 3px 12px;
+                    background: $color-primary;
+                    color: $color-text-inverse;
+                    border: none;
+                    border-radius: $border-radius;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    transition: background $transition-speed ease;
+                    line-height: 1.4;
+                    font-weight: 500;
+
+                    &:hover {
+                        background: color.adjust($color-primary, $lightness: -10%);
+                    }
+                }
+            }
+        }
+    }
+
+    h3 {
+        margin: 0;
+        color: $color-text;
+        font-size: 1.1rem;
+        padding: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .author {
+        color: $color-text-light;
+        font-style: italic;
+        margin: $spacing-xs 0 0;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        color: $color-text-light;
+        margin-top: $spacing-xs;
+        text-align: left;
+    }
+
+    .move-to-list, .add-to-list {
+        margin-top: $spacing-sm;
+        display: flex;
+        gap: $spacing-xs;
+        flex-direction: column;
+
+        select {
+            width: 100%;
+            padding: $spacing-xs;
+            border: 1px solid $color-border;
+            border-radius: $border-radius;
+            background: $color-background;
+            color: $color-text;
+            font-size: 1rem;
+
+            &:focus {
+                outline: none;
+                border-color: $color-highlight;
+            }
+        }
+
+        button {
+            padding: $spacing-xs $spacing-sm;
+            background: $color-primary;
+            color: $color-text-inverse;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background $transition-speed ease;
+
+            &:hover {
+                background: color.adjust($color-primary, $lightness: -10%);
+            }
+        }
     }
 
     .action-buttons {
@@ -67,65 +216,6 @@
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.1);
-            }
-        }
-    }
-
-    h3 {
-        margin: $spacing-xs 0;
-        color: $color-text;
-        font-size: 1.1rem;
-        padding: 0 1rem;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    .author {
-        color: $color-text-light;
-        font-style: italic;
-        margin: 0;
-    }
-
-    .description {
-        font-size: 0.9rem;
-        color: $color-text-light;
-        margin-top: $spacing-xs;
-        text-align: left;
-    }
-
-    .move-to-list, .add-to-list {
-        margin-top: $spacing-sm;
-        display: flex;
-        gap: $spacing-xs;
-        flex-direction: column;
-
-        select {
-            width: 100%;
-            padding: $spacing-xs;
-            border: 1px solid $color-border;
-            border-radius: $border-radius;
-            background: $color-background;
-            color: $color-text;
-            font-size: 1rem;
-
-            &:focus {
-                outline: none;
-                border-color: $color-highlight;
-            }
-        }
-
-        button {
-            padding: $spacing-xs $spacing-sm;
-            background: $color-primary;
-            color: $color-text-inverse;
-            border: none;
-            border-radius: $border-radius;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background $transition-speed ease;
-
-            &:hover {
-                background: color.adjust($color-primary, $lightness: -10%);
             }
         }
     }
