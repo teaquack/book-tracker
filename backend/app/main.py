@@ -6,8 +6,12 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# Fix the database URI configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///book_tracker.db'
+# Set up the database path in the instance folder
+db_path = os.path.join(app.instance_path, 'book_tracker.db')
+# Create instance folder if it doesn't exist
+os.makedirs(app.instance_path, exist_ok=True)
+# Configure database URI with absolute path
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
