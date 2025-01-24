@@ -1,0 +1,92 @@
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        font-size: 0.9rem;
+        color: $color-text-light;
+    }
+
+    input, textarea {
+        padding: $spacing-xs;
+        border: 1px solid $color-border;
+        border-radius: $border-radius;
+        font-size: 0.9rem;
+        width: 100%;
+        background: $color-background;
+
+        &:focus {
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+        }
+    }
+
+    textarea {
+        min-height: 4rem;
+        resize: vertical;
+    }
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-xs;
+    margin-top: $spacing-xs;
+}
+
+.save-button, .cancel-button {
+    padding: $spacing-xs $spacing-sm;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color $transition-speed;
+}
+
+.save-button {
+    background: $color-primary;
+    color: white;
+
+    &:hover {
+        background: $color-primary-dark;
+    }
+}
+
+.cancel-button {
+    background: $color-background-light;
+    color: $color-text-light;
+
+    &:hover {
+        background: darken($color-background-light, 5%);
+    }
+}
+
+.edit-button {
+    position: absolute;
+    top: $spacing-xs;
+    right: $spacing-xs;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: $color-text-light;
+    padding: $spacing-xs;
+    border-radius: $border-radius;
+    line-height: 1;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: $color-background-light;
+        color: $color-primary;
+    }
+}

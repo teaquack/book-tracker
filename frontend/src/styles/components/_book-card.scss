@@ -1,0 +1,88 @@
+.book-card {
+    background: $color-background-card;
+    border-radius: $border-radius;
+    padding: $spacing-sm;
+    border: 1px solid transparent;
+    transition: border-color $transition-speed ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    &:hover {
+        border-color: $color-highlight;
+    }
+
+    .book-content {
+        flex: 1;
+        position: relative;
+    }
+
+    h3 {
+        margin: 0 0 $spacing-xs 0;
+        color: $color-text;
+        padding-right: 2.5rem;
+    }
+
+    .author {
+        color: $color-text-light;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        color: $color-text-light;
+        margin-top: $spacing-xs;
+    }
+
+    .move-to-list, .add-to-list {
+        margin-top: $spacing-sm;
+        display: flex;
+        gap: $spacing-xs;
+        flex-direction: column;
+
+        select {
+            width: 100%;
+            padding: $spacing-xs;
+            border: 1px solid $color-border;
+            border-radius: $border-radius;
+            font-size: 0.9rem;
+            color: $color-text;
+            background-color: white;
+            cursor: pointer;
+
+            &:focus {
+                outline: none;
+                border-color: $color-primary;
+                box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+            }
+
+            option {
+                color: $color-text;
+                background: white;
+            }
+        }
+
+        button {
+            width: 100%;
+            background: $color-primary;
+            color: white;
+            padding: $spacing-xs;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color $transition-speed;
+
+            &:hover {
+                background: $color-primary-dark;
+            }
+
+            &:disabled {
+                background: #a0aec0;
+                cursor: not-allowed;
+            }
+        }
+    }
+}

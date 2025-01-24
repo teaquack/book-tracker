@@ -1,0 +1,100 @@
+.add-list {
+    background: white;
+    padding: $spacing-sm;
+    border-radius: $border-radius-lg;
+    margin-bottom: $spacing-sm;
+    box-shadow: $shadow-sm;
+
+    h2 {
+        margin: 0 0 $spacing-sm 0;
+        color: $color-text;
+    }
+}
+
+.form-group {
+    margin-bottom: $spacing-sm;
+}
+
+.input-group {
+    display: flex;
+    gap: $spacing-xs;
+}
+
+label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    color: $color-text;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: $spacing-xs;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    color: $color-text;
+    background-color: white;
+
+    &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+    }
+}
+
+select {
+    appearance: auto;
+    cursor: pointer;
+
+    option {
+        color: $color-text;
+        background: white;
+    }
+}
+
+button {
+    background: $color-primary;
+    color: white;
+    padding: $spacing-xs $spacing-sm;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color $transition-speed;
+
+    &:hover {
+        background: $color-primary-dark;
+    }
+
+    &:disabled {
+        background: #a0aec0;
+        cursor: not-allowed;
+    }
+}
+
+.error {
+    background: $color-error-bg;
+    color: $color-error;
+    padding: $spacing-xs;
+    border-radius: $border-radius;
+    margin-bottom: $spacing-sm;
+}
+
+.add-book-form {
+    background: white;
+    padding: $spacing-md;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    max-width: 500px;
+    margin: $spacing-sm auto;
+
+    h2 {
+        margin: 0 0 $spacing-md 0;
+        color: $color-text;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        margin-top: $spacing-sm;
+    }
+}
