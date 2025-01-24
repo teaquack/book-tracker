@@ -103,8 +103,47 @@ export async function createList(name: string): Promise<BookList> {
         throw new Error('Failed to create list');
     }
     const newList: ApiBookList = await response.json();
-    const bookList: BookList = { ...newList, books: [] };
-    lists.update(current => [...current, bookList]);
+    
+    // Create the new list with empty books array
+    const bookList: BookList = {
+        id: newList.id,
+        name: newList.name,
+        books: []
+    };
+
+    // Immediately update the lists store
+    lists.update(currentLists => {
+        const updatedLists = [...currentLists, bookList];
+        return updatedLists;
+    });
+
+    // Fetch fresh data in the background
+    setTimeout(async () => {
+        try {
+            const [listsData, booksData] = await Promise.all([
+                fetchLists(),
+                fetchBooks()
+            ]);
+
+            // Update the books store
+            const normalizedBooks: Book[] = booksData.map(book => ({
+                ...book,
+                list_id: book.list_id || undefined
+            }));
+            books.set(normalizedBooks);
+
+            // Update the lists store
+            const listsWithBooks: BookList[] = listsData.map(list => ({
+                id: list.id,
+                name: list.name,
+                books: normalizedBooks.filter(book => book.list_id === list.id)
+            }));
+            lists.set(listsWithBooks);
+        } catch (error) {
+            console.error('Error refreshing data:', error);
+        }
+    }, 0);
+
     return bookList;
 }
 
