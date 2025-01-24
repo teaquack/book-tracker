@@ -7,6 +7,12 @@
     border-radius: $border-radius;
     margin-bottom: $spacing-lg;
 
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
     h2 {
         margin-bottom: $spacing-md;
         color: $color-text;
@@ -16,9 +22,13 @@
 
     .books-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: 1fr;
         gap: $spacing-md;
         margin-bottom: $spacing-lg;
+
+        @media (min-width: 768px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
 
     .book-card {
@@ -34,26 +44,14 @@
         &:hover {
             border-color: $color-highlight;
         }
-    }
 
-    .action-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: $spacing-xs;
-        margin-top: auto;
-        padding-top: $spacing-sm;
+        .book-content {
+            flex: 1;
+        }
 
-        button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: $spacing-xs;
-            border-radius: $border-radius;
-            transition: background-color $transition-speed ease;
-
-            &:hover {
-                background-color: rgba($color-text, 0.1);
-            }
+        h3 {
+            margin: $spacing-md 0 $spacing-xs;
+            padding-right: 70px;
         }
     }
 

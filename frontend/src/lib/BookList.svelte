@@ -99,100 +99,110 @@
 </script>
 
 <div class="book-list">
-    <h2>{list.name}</h2>
-    <div class="books">
-        {#if booksWithSelect.length === 0}
-            <p class="empty">No books in this list</p>
-        {:else}
-            {#each booksWithSelect as book (book.id)}
-                <div class="book-card">
-                    <div class="book-content">
-                        {#if editingId === book.id}
-                            <div class="edit-form">
-                                <button 
-                                    class="edit-button"
-                                    on:click={cancelEdit}
-                                    title="Cancel"
-                                >
-                                    ✕
-                                </button>
-                                <label>
-                                    Title:
-                                    <input 
-                                        type="text" 
-                                        bind:value={editTitle}
-                                        placeholder="Title"
-                                    />
-                                </label>
-                                <label>
-                                    Author:
-                                    <input 
-                                        type="text" 
-                                        bind:value={editAuthor}
-                                        placeholder="Author"
-                                    />
-                                </label>
-                                <label>
-                                    Description:
-                                    <textarea 
-                                        bind:value={editDescription}
-                                        placeholder="Description"
-                                    ></textarea>
-                                </label>
-                                <div class="edit-actions">
+    <div class="container">
+        <h2>{list.name}</h2>
+        <div class="books-grid">
+            {#if booksWithSelect.length === 0}
+                <p class="empty">No books in this list</p>
+            {:else}
+                {#each booksWithSelect as book (book.id)}
+                    <div class="book-card">
+                        <div class="book-content">
+                            {#if editingId === book.id}
+                                <div class="edit-form">
                                     <button 
-                                        class="save-button"
-                                        on:click={saveEdit}
+                                        class="edit-button"
+                                        on:click={cancelEdit}
+                                        title="Cancel"
                                     >
-                                        Save
+                                        ✕
                                     </button>
+                                    <label>
+                                        Title:
+                                        <input 
+                                            type="text" 
+                                            bind:value={editTitle}
+                                            placeholder="Title"
+                                        />
+                                    </label>
+                                    <label>
+                                        Author:
+                                        <input 
+                                            type="text" 
+                                            bind:value={editAuthor}
+                                            placeholder="Author"
+                                        />
+                                    </label>
+                                    <label>
+                                        Description:
+                                        <textarea 
+                                            bind:value={editDescription}
+                                            placeholder="Description"
+                                        ></textarea>
+                                    </label>
+                                    <div class="edit-actions">
+                                        <button 
+                                            class="save-button"
+                                            on:click={saveEdit}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        {:else}
-                            <div class="action-buttons">
-                                <button 
-                                    class="edit-button"
-                                    on:click={() => startEdit(book)}
-                                    title="Edit"
-                                >
-                                    ✏️
-                                </button>
-                                <button 
-                                    class="delete-button"
-                                    on:click={() => handleDelete(book)}
-                                    title="Delete"
-                                >
-                                    🗑️
-                                </button>
-                            </div>
-                            <h3>{book.title}</h3>
-                            <p class="author">by {book.author}</p>
-                            {#if book.description}
-                                <p class="description">{book.description}</p>
+                            {:else}
+                                <table class="action-buttons">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button 
+                                                    class="edit-button"
+                                                    on:click={() => startEdit(book)}
+                                                    title="Edit"
+                                                >
+                                                    ✏️
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    class="delete-button"
+                                                    on:click={() => handleDelete(book)}
+                                                    title="Delete"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <h3>{book.title}</h3>
+                                <p class="author">by {book.author}</p>
+                                {#if book.description}
+                                    <p class="description">{book.description}</p>
+                                {/if}
                             {/if}
+                        </div>
+                        {#if otherLists.length > 0}
+                            <div class="move-to-list">
+                                <select 
+                                    bind:this={book.selectElement}
+                                    value=""
+                                >
+                                    <option value="" disabled>Move to list...</option>
+                                    {#each otherLists as otherList}
+                                        <option value={otherList.id}>{otherList.name}</option>
+                                    {/each}
+                                </select>
+                                <button 
+                                    class="move-button"
+                                    on:click={() => book.selectElement && moveToList(book.id, book.selectElement)}
+                                >
+                                    Move
+                                </button>
+                            </div>
                         {/if}
                     </div>
-                    {#if otherLists.length > 0}
-                        <div class="move-to-list">
-                            <select 
-                                bind:this={book.selectElement}
-                                value=""
-                            >
-                                <option value="" disabled>Move to list...</option>
-                                {#each otherLists as otherList}
-                                    <option value={otherList.id}>{otherList.name}</option>
-                                {/each}
-                            </select>
-                            <button 
-                                class="move-button"
-                                on:click={() => book.selectElement && moveToList(book.id, book.selectElement)}
-                            >
-                                Move
-                            </button>
-                        </div>
-                    {/if}
-                </div>
-            {/each}
-        {/if}
+                {/each}
+            {/if}
+        </div>
     </div>
 </div>

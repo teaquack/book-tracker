@@ -78,97 +78,107 @@
 </script>
 
 <div class="book-list unlisted-books">
-    <h2>Unlisted Books</h2>
-    <div class="books">
-        {#if $unlistedBooks.length === 0}
-            <p class="empty">No unlisted books</p>
-        {/if}
-        {#each $unlistedBooks as book (book.id)}
-            <div class="book-card">
-                <div class="book-content">
-                    {#if editingId === book.id}
-                        <div class="edit-form">
-                            <button 
-                                class="edit-button"
-                                on:click={cancelEdit}
-                                title="Cancel"
-                            >
-                                ✕
-                            </button>
-                            <label>
-                                Title:
-                                <input 
-                                    type="text" 
-                                    bind:value={editTitle}
-                                    placeholder="Title"
-                                />
-                            </label>
-                            <label>
-                                Author:
-                                <input 
-                                    type="text" 
-                                    bind:value={editAuthor}
-                                    placeholder="Author"
-                                />
-                            </label>
-                            <label>
-                                Description:
-                                <textarea 
-                                    bind:value={editDescription}
-                                    placeholder="Description"
-                                ></textarea>
-                            </label>
-                            <div class="edit-actions">
+    <div class="container">
+        <h2>Unlisted Books</h2>
+        <div class="books-grid">
+            {#if $unlistedBooks.length === 0}
+                <p class="empty">No unlisted books</p>
+            {/if}
+            {#each $unlistedBooks as book (book.id)}
+                <div class="book-card">
+                    <div class="book-content">
+                        {#if editingId === book.id}
+                            <div class="edit-form">
                                 <button 
-                                    class="save-button"
-                                    on:click={saveEdit}
+                                    class="edit-button"
+                                    on:click={cancelEdit}
+                                    title="Cancel"
                                 >
-                                    Save
+                                    ✕
                                 </button>
+                                <label>
+                                    Title:
+                                    <input 
+                                        type="text" 
+                                        bind:value={editTitle}
+                                        placeholder="Title"
+                                    />
+                                </label>
+                                <label>
+                                    Author:
+                                    <input 
+                                        type="text" 
+                                        bind:value={editAuthor}
+                                        placeholder="Author"
+                                    />
+                                </label>
+                                <label>
+                                    Description:
+                                    <textarea 
+                                        bind:value={editDescription}
+                                        placeholder="Description"
+                                    ></textarea>
+                                </label>
+                                <div class="edit-actions">
+                                    <button 
+                                        class="save-button"
+                                        on:click={saveEdit}
+                                    >
+                                        Save
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    {:else}
-                        <div class="action-buttons">
-                            <button 
-                                class="edit-button"
-                                on:click={() => startEdit(book)}
-                                title="Edit"
-                            >
-                                ✏️
-                            </button>
-                            <button 
-                                class="delete-button"
-                                on:click={() => handleDelete(book)}
-                                title="Delete"
-                            >
-                                🗑️
-                            </button>
-                        </div>
-                        <h3>{book.title}</h3>
-                        <p class="author">by {book.author}</p>
-                        {#if book.description}
-                            <p class="description">{book.description}</p>
+                        {:else}
+                            <table class="action-buttons">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <button 
+                                                class="edit-button"
+                                                on:click={() => startEdit(book)}
+                                                title="Edit"
+                                            >
+                                                ✏️
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                class="delete-button"
+                                                on:click={() => handleDelete(book)}
+                                                title="Delete"
+                                            >
+                                                🗑️
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h3>{book.title}</h3>
+                            <p class="author">by {book.author}</p>
+                            {#if book.description}
+                                <p class="description">{book.description}</p>
+                            {/if}
                         {/if}
-                    {/if}
+                    </div>
+                    <div class="add-to-list">
+                        <select 
+                            use:handleSelectBinding={book.id}
+                            value=""
+                        >
+                            <option value="" disabled>Select a list...</option>
+                            {#each $lists as list}
+                                <option value={list.id}>{list.name}</option>
+                            {/each}
+                        </select>
+                        <button 
+                            class="add-button"
+                            on:click={() => addToList(book.id)}
+                        >
+                            Add to List
+                        </button>
+                    </div>
                 </div>
-                <div class="add-to-list">
-                    <select 
-                        use:handleSelectBinding={book.id}
-                        value=""
-                    >
-                        <option value="" disabled>Select a list...</option>
-                        {#each $lists as list}
-                            <option value={list.id}>{list.name}</option>
-                        {/each}
-                    </select>
-                    <button 
-                        class="add-button"
-                        on:click={() => addToList(book.id)}
-                    >
-                        Add to List
-                    </button>
-                </div>
-            </div>
-        {/each}
+            {/each}
+        </div>
     </div>
 </div>
