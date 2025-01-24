@@ -1,13 +1,10 @@
 // Import base styles
-@import 'base/variables';
-@import 'base/reset';
+@use 'base/variables' as *;
+@use 'base/reset';
 
 // Import component styles
-@import 'components/book-card';
-@import 'components/book-edit-form';
-@import 'components/unlisted-books';
-@import 'components/forms';
-
-// Layouts
-@import 'layouts/main';
-@import 'layouts/book-list';
+@use 'components/book-list-shared';
+@use 'components/book-list';
+@use 'components/book-card';
+@use 'components/book-edit-form';
+@use 'components/unlisted-books';

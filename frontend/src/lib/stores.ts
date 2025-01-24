@@ -271,3 +271,28 @@ export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id
     
     return updatedBook;
 }
+
+export async function deleteBook(bookId: number): Promise<void> {
+    const response = await fetch(`${API_URL}/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || 'Failed to delete book');
+    }
+
+    // Update the books store - this will automatically update unlistedBooks
+    books.update(currentBooks => currentBooks.filter(book => book.id !== bookId));
+
+    // Update any lists that might contain this book
+    lists.update(currentLists => 
+        currentLists.map(list => ({
+            ...list,
+            books: list.books.filter(book => book.id !== bookId)
+        }))
+    );
+}

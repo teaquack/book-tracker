@@ -1,0 +1,7 @@
+@use '../base/variables' as *;
+@use 'sass:color';
+@use 'book-list-shared';
+
+.book-list {
+    @include book-list-shared.book-list;
+}

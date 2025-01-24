@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { lists, unlistedBooks, addBookToList, initializeStores, updateBook } from './stores';
+    import { lists, unlistedBooks, addBookToList, initializeStores, updateBook, deleteBook } from './stores';
     import type { Book } from './stores';
 
     // Map to store select elements
@@ -35,6 +35,18 @@
             editingId = null;
         } catch (e) {
             console.error('Failed to update book:', e);
+        }
+    }
+
+    async function handleDelete(book: Book) {
+        if (!confirm(`Are you sure you want to delete "${book.title}"?`)) {
+            return;
+        }
+
+        try {
+            await deleteBook(book.id);
+        } catch (e) {
+            console.error('Failed to delete book:', e);
         }
     }
 
@@ -116,13 +128,22 @@
                             </div>
                         </div>
                     {:else}
-                        <button 
-                            class="edit-button"
-                            on:click={() => startEdit(book)}
-                            title="Edit"
-                        >
-                            ✏️
-                        </button>
+                        <div class="action-buttons">
+                            <button 
+                                class="edit-button"
+                                on:click={() => startEdit(book)}
+                                title="Edit"
+                            >
+                                ✏️
+                            </button>
+                            <button 
+                                class="delete-button"
+                                on:click={() => handleDelete(book)}
+                                title="Delete"
+                            >
+                                🗑️
+                            </button>
+                        </div>
                         <h3>{book.title}</h3>
                         <p class="author">by {book.author}</p>
                         {#if book.description}

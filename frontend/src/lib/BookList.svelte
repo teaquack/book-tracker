@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { lists, addBookToList, booksInList, updateBook } from './stores';
+    import { lists, addBookToList, booksInList, updateBook, deleteBook } from './stores';
     import type { BookList, Book } from './stores';
 
     export let list: BookList;
@@ -63,6 +63,18 @@
         }
     }
 
+    async function handleDelete(book: BookWithSelect) {
+        if (!confirm(`Are you sure you want to delete "${book.title}"?`)) {
+            return;
+        }
+
+        try {
+            await deleteBook(book.id);
+        } catch (e) {
+            console.error('Failed to delete book:', e);
+        }
+    }
+
     // Get the derived store for this list's books
     const listBooksStore = booksInList(list.id);
     
@@ -108,8 +120,7 @@
                                     Title:
                                     <input 
                                         type="text" 
-                                        value={editTitle}
-                                        on:input={(e) => editTitle = e.currentTarget.value}
+                                        bind:value={editTitle}
                                         placeholder="Title"
                                     />
                                 </label>
@@ -117,16 +128,14 @@
                                     Author:
                                     <input 
                                         type="text" 
-                                        value={editAuthor}
-                                        on:input={(e) => editAuthor = e.currentTarget.value}
+                                        bind:value={editAuthor}
                                         placeholder="Author"
                                     />
                                 </label>
                                 <label>
                                     Description:
                                     <textarea 
-                                        value={editDescription}
-                                        on:input={(e) => editDescription = e.currentTarget.value}
+                                        bind:value={editDescription}
                                         placeholder="Description"
                                     ></textarea>
                                 </label>
@@ -140,13 +149,22 @@
                                 </div>
                             </div>
                         {:else}
-                            <button 
-                                class="edit-button"
-                                on:click={() => startEdit(book)}
-                                title="Edit"
-                            >
-                                ✏️
-                            </button>
+                            <div class="action-buttons">
+                                <button 
+                                    class="edit-button"
+                                    on:click={() => startEdit(book)}
+                                    title="Edit"
+                                >
+                                    ✏️
+                                </button>
+                                <button 
+                                    class="delete-button"
+                                    on:click={() => handleDelete(book)}
+                                    title="Delete"
+                                >
+                                    🗑️
+                                </button>
+                            </div>
                             <h3>{book.title}</h3>
                             <p class="author">by {book.author}</p>
                             {#if book.description}

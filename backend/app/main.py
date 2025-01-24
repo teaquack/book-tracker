@@ -2,9 +2,14 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
 # Set up the database path in the instance folder
 db_path = os.path.join(app.instance_path, 'book_tracker.db')
@@ -51,67 +56,80 @@ class List(db.Model):
 with app.app_context():
     db.create_all()
 
+@app.before_request
+def log_request_info():
+    logger.debug(f"Request Method: {request.method}")
+    logger.debug(f"Request URL: {request.url}")
+    logger.debug(f"Request Headers: {dict(request.headers)}")
+
 # API Routes
-@app.route('/books', methods=['POST'])
-def create_book():
-    data = request.get_json()
-    new_book = Book(
-        title=data['title'],
-        author=data['author'],
-        description=data.get('description')
-    )
-    
-    # If list_id is provided, add the book to that list
-    if 'list_id' in data and data['list_id']:
-        book_list = List.query.get_or_404(data['list_id'])
-        new_book.list = book_list
-    
-    db.session.add(new_book)
-    db.session.commit()
-    return jsonify(new_book.to_dict())
+@app.route('/books', methods=['GET', 'POST'])
+def books():
+    if request.method == 'POST':
+        data = request.get_json()
+        new_book = Book(
+            title=data['title'],
+            author=data['author'],
+            description=data.get('description')
+        )
+        if 'list_id' in data and data['list_id']:
+            book_list = List.query.get_or_404(data['list_id'])
+            new_book.list = book_list
+        db.session.add(new_book)
+        db.session.commit()
+        return jsonify(new_book.to_dict())
+    else:
+        books = Book.query.all()
+        return jsonify([book.to_dict() for book in books])
 
-@app.route('/books', methods=['GET'])
-def get_books():
-    # Get all books, including those in lists
-    books = Book.query.all()
-    return jsonify([book.to_dict() for book in books])
-
-@app.route('/books/<int:book_id>', methods=['PUT'])
-def update_book(book_id):
-    data = request.get_json()
-    book = Book.query.get_or_404(book_id)
+@app.route('/books/<int:book_id>', methods=['GET', 'PUT', 'DELETE'])
+def book_operations(book_id):
+    logger.debug(f"Book operation - Method: {request.method}, Book ID: {book_id}")
     
-    # Update book fields
-    book.title = data.get('title', book.title)
-    book.author = data.get('author', book.author)
-    book.description = data.get('description', book.description)
+    if request.method == 'DELETE':
+        logger.debug("Processing DELETE request")
+        book = Book.query.get_or_404(book_id)
+        db.session.delete(book)
+        db.session.commit()
+        logger.debug("Book deleted successfully")
+        return '', 204
     
-    db.session.commit()
-    return jsonify(book.to_dict())
+    elif request.method == 'PUT':
+        data = request.get_json()
+        book = Book.query.get_or_404(book_id)
+        book.title = data.get('title', book.title)
+        book.author = data.get('author', book.author)
+        book.description = data.get('description', book.description)
+        db.session.commit()
+        return jsonify(book.to_dict())
+    
+    else:  # GET
+        book = Book.query.get_or_404(book_id)
+        return jsonify(book.to_dict())
 
-@app.route('/lists', methods=['POST'])
-def create_list():
-    data = request.get_json()
-    new_list = List(name=data['name'])
-    db.session.add(new_list)
-    db.session.commit()
-    return jsonify(new_list.to_dict())
-
-@app.route('/lists', methods=['GET'])
-def get_lists():
-    lists = List.query.all()
-    return jsonify([list.to_dict() for list in lists])
+@app.route('/lists', methods=['GET', 'POST'])
+def lists():
+    if request.method == 'POST':
+        data = request.get_json()
+        new_list = List(name=data['name'])
+        db.session.add(new_list)
+        db.session.commit()
+        return jsonify(new_list.to_dict())
+    else:
+        lists = List.query.all()
+        return jsonify([lst.to_dict() for lst in lists])
 
 @app.route('/lists/<int:list_id>/books/<int:book_id>', methods=['POST'])
 def add_book_to_list(list_id, book_id):
     book_list = List.query.get_or_404(list_id)
     book = Book.query.get_or_404(book_id)
-    
-    # Update the book's list
     book.list = book_list
     db.session.commit()
-    
     return jsonify(book_list.to_dict())
 
 if __name__ == '__main__':
+    logger.debug("Starting Flask application...")
+    logger.debug("Registered routes:")
+    for rule in app.url_map.iter_rules():
+        logger.debug(f"{rule} - {rule.methods}")
     app.run(debug=True)

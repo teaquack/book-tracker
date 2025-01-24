@@ -1,37 +1,47 @@
-.book-list.unlisted-books {
-    margin-bottom: 2rem;
+@use '../base/variables' as *;
+@use 'sass:color';
+@use 'book-list-shared';
 
-    h2 {
-        margin-bottom: 1rem;
-        color: #2c3e50;
-    }
+.unlisted-books {
+    @include book-list-shared.book-list;
+    
+    // Add any specific styles for unlisted books here
+    .save-button {
+        background: $color-success;
+        color: $color-text-inverse;
+        border: none;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius;
+        cursor: pointer;
 
-    .empty {
-        color: #7f8c8d;
-        font-style: italic;
+        &:hover {
+            background: color.adjust($color-success, $lightness: -10%);
+        }
     }
+}
 
-    .books {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1rem;
-    }
+.book-card {
+    position: relative;
+}
+
+.book-content {
+    padding-top: $spacing-md; 
 }
 
 .edit-form {
     position: relative;
-    padding: 1rem;
+    padding: $spacing-md;
 
     label {
         display: block;
-        margin-bottom: 1rem;
+        margin-bottom: $spacing-md;
 
         input, textarea {
             width: 100%;
-            padding: 0.5rem;
-            margin-top: 0.25rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: $spacing-xs;
+            margin-top: $spacing-xs;
+            border: 1px solid $color-border;
+            border-radius: $border-radius;
         }
 
         textarea {
@@ -41,16 +51,25 @@
     }
 }
 
-.edit-button {
+.action-buttons {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: $spacing-xs;
+    right: $spacing-xs;
+    display: flex;
+    gap: $spacing-md;
+    z-index: 2;
+}
+
+.edit-button,
+.delete-button {
     background: none;
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    padding: 0.25rem;
-    z-index: 1;
+    padding: 0;
+    line-height: 1;
+    display: inline-block;
+    transition: opacity 0.2s ease;
 
     &:hover {
         opacity: 0.8;
@@ -60,18 +79,5 @@
 .edit-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
-}
-
-.save-button {
-    background: #2ecc71;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-        background: #27ae60;
-    }
+    gap: $spacing-xs;
 }
