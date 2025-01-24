@@ -1,5 +1,5 @@
 <script lang="ts">
-import { lists, createList, books } from './stores';
+import { lists, createList, books, deleteList } from './stores';
 
 let newListName = '';
 let error = '';
@@ -21,6 +21,19 @@ async function handleCreateList() {
   } catch (e) {
     error = 'Failed to create list';
     console.error('Error creating list:', e);
+  }
+}
+
+async function handleDeleteList(listId: number) {
+  if (!confirm('Are you sure you want to delete this list? Books in this list will be moved to Unlisted Books.')) {
+    return;
+  }
+
+  try {
+    await deleteList(listId);
+  } catch (e) {
+    error = 'Failed to delete list';
+    console.error('Error deleting list:', e);
   }
 }
 
@@ -50,8 +63,17 @@ function getBookCount(listId: number): number {
     <ul>
       {#each allLists as list (list.id)}
         <li class="list-item">
-          <span class="list-name">{list.name}</span>
-          <span class="book-count">{getBookCount(list.id)}</span>
+          <div class="list-info">
+            <span class="list-name">{list.name}</span>
+            <span class="book-count">{getBookCount(list.id)}</span>
+          </div>
+          <button 
+            class="delete-button" 
+            on:click={() => handleDeleteList(list.id)}
+            title="Delete list"
+          >
+            ×
+          </button>
         </li>
       {/each}
     </ul>
@@ -148,11 +170,26 @@ function getBookCount(listId: number): number {
 
       &:hover {
         border-color: #3498db;
+
+        .delete-button {
+          opacity: 1;
+        }
+      }
+
+      .list-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        min-width: 0;
       }
 
       .list-name {
         font-weight: 500;
         color: #2c3e50;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .book-count {
@@ -161,6 +198,24 @@ function getBookCount(listId: number): number {
         border-radius: 12px;
         font-size: 0.8rem;
         color: #4a5568;
+        flex-shrink: 0;
+      }
+
+      .delete-button {
+        background: none;
+        border: none;
+        color: #e53e3e;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        margin: -0.25rem -0.5rem;
+        opacity: 0;
+        transition: all 0.2s ease;
+        border-radius: 4px;
+
+        &:hover {
+          background: #fed7d7;
+        }
       }
     }
   }

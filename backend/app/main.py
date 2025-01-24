@@ -119,6 +119,19 @@ def lists():
         lists = List.query.all()
         return jsonify([lst.to_dict() for lst in lists])
 
+@app.route('/lists/<int:list_id>', methods=['DELETE'])
+def delete_list(list_id):
+    book_list = List.query.get_or_404(list_id)
+    
+    # Remove list_id from all books in the list
+    for book in book_list.books:
+        book.list_id = None
+    
+    # Delete the list
+    db.session.delete(book_list)
+    db.session.commit()
+    return '', 204
+
 @app.route('/lists/<int:list_id>/books/<int:book_id>', methods=['POST'])
 def add_book_to_list(list_id, book_id):
     book_list = List.query.get_or_404(list_id)

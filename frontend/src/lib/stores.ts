@@ -296,3 +296,24 @@ export async function deleteBook(bookId: number): Promise<void> {
         }))
     );
 }
+
+export async function deleteList(listId: number): Promise<void> {
+    const response = await fetch(`${API_URL}/lists/${listId}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to delete list');
+    }
+
+    lists.update(currentLists => currentLists.filter(list => list.id !== listId));
+    
+    // Update books store to remove list_id from books in the deleted list
+    books.update(currentBooks => 
+        currentBooks.map(book => 
+            book.list_id === listId 
+                ? { ...book, list_id: undefined }
+                : book
+        )
+    );
+}
