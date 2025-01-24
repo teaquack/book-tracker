@@ -8,6 +8,10 @@
 
   let newListName = '';
   let error = '';
+  let allLists: typeof $lists = [];
+
+  // Subscribe to lists store changes
+  $: allLists = $lists;
 
   onMount(async () => {
     try {
@@ -18,7 +22,7 @@
   });
 
   async function handleCreateList() {
-    if (!newListName) {
+    if (!newListName.trim()) {
       error = 'List name is required';
       return;
     }
@@ -29,6 +33,7 @@
       error = '';
     } catch (e) {
       error = 'Failed to create list';
+      console.error('Error creating list:', e);
     }
   }
 </script>
@@ -56,7 +61,7 @@
 
         <UnlistedBooks />
 
-        {#each $lists as list (list.id)}
+        {#each allLists as list (list.id)}
           <BookList {list} />
         {/each}
       </div>
