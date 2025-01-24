@@ -3,6 +3,7 @@
 @use 'base/reset';
 
 // Import component styles
+@use 'components/app';
 @use 'components/book-list-shared';
 @use 'components/book-list';
 @use 'components/book-card';
