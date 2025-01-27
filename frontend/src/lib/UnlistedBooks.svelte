@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { lists, unlistedBooks, addBookToList, initializeStores, updateBook, deleteBook } from './stores';
-    import type { Book } from './stores';
+    import { lists, unlistedBooks, addBookToList, initializeStores, updateBook, deleteBook } from './stores/index';
+    import type { Book } from './types';
 
     // Map to store select elements
     const selectElements = new Map<number, HTMLSelectElement>();

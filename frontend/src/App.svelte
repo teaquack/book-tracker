@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { lists, initializeStores } from './lib/stores';
+  import { lists, initializeStores } from './lib/stores/index';
   import BookList from './lib/BookList.svelte';
   import AddBookForm from './lib/AddBookForm.svelte';
   import UnlistedBooks from './lib/UnlistedBooks.svelte';

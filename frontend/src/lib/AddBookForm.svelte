@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createBook, lists } from './stores';
+    import { createBook, lists } from './stores/index';
     
     let title = '';
     let author = '';
@@ -10,10 +10,12 @@
     async function handleSubmit() {
         try {
             error = '';
-            await createBook(
-                { title, author, description },
-                selectedListId ? parseInt(selectedListId) : undefined
-            );
+            await createBook({
+                title,
+                author,
+                description,
+                list_id: selectedListId ? parseInt(selectedListId) : undefined
+            });
             
             // Reset form
             title = '';

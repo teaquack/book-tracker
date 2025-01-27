@@ -1,5 +1,5 @@
 <script lang="ts">
-import { lists, createList, books, deleteList } from './stores';
+import { lists, createList, books, deleteList } from './stores/index';
 
 let newListName = '';
 let error = '';

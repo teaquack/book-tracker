@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { lists, books, addBookToList, booksInList, updateBook, deleteBook } from './stores';
-    import type { BookList, Book } from './stores';
+    import { lists, books, addBookToList, getBooksByList, updateBook, deleteBook } from './stores/index';
+    import type { List, Book } from './types';
 
-    export let list: BookList;
+    export let list: List;
 
     type BookWithSelect = {
         id: number;
@@ -62,7 +62,7 @@
 
         try {
             error = '';
-            await addBookToList(targetListId, bookId);
+            await addBookToList(bookId, targetListId);
             select.value = ''; // Reset the select after moving
         } catch (e) {
             error = 'Failed to move book to list. Please try again.';
@@ -76,7 +76,7 @@
             // Update the book to remove its list_id
             await updateBook(book.id, {
                 list_id: undefined
-            }, true);
+            });
         } catch (e) {
             error = 'Failed to remove book from list. Please try again.';
             console.error('Failed to remove book from list:', e);
@@ -84,10 +84,10 @@
     }
 
     // Get the derived store for this list's books
-    const listBooksStore = booksInList(list.id);
+    const listBooksStore = getBooksByList(list.id);
     
     // Get other lists for the move options, but only when lists changes
-    let otherLists: BookList[] = [];
+    let otherLists: List[] = [];
     $: {
         if ($lists) {
             otherLists = $lists.filter(l => l.id !== list.id);
