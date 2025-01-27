@@ -1,6 +1,7 @@
 // Import base styles
 @use './base/variables' as *;
 @use './base/reset';
+@use './base/forms';
 
 // Import layouts
 @use './layouts/main';
@@ -14,3 +15,4 @@
 @use './components/unlisted-books';
 @use './components/lists-sidebar';
 @use './components/add-book-form';
+@use './components/tags-panel';

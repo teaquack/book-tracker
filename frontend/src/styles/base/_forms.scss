@@ -1,0 +1,61 @@
+@use 'variables' as *;
+
+// Base input styles
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea {
+    width: 100%;
+    padding: $spacing-xs;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    font-size: 0.9rem;
+
+    &::placeholder {
+        color: $color-text-light;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+    }
+}
+
+// Base button styles
+.btn,
+button[type="submit"],
+.create-button {
+    width: 100%;
+    padding: $spacing-xs;
+    background: $color-primary;
+    color: $color-text-inverse;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color $transition-speed ease;
+
+    &:hover {
+        background: $color-primary-dark;
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+}
+
+// Form group spacing
+.input-group {
+    margin-bottom: $spacing-md;
+}
+
+// Error messages
+.error {
+    color: $color-error;
+    margin-bottom: $spacing-sm;
+    font-size: 0.875rem;
+}
