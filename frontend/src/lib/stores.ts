@@ -234,13 +234,16 @@ export async function addBookToList(listId: number, bookId: number): Promise<Boo
     return convertedList;
 }
 
-export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id' | 'list_id'>>): Promise<Book> {
+export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id'>>, updateListId: boolean = false): Promise<Book> {
+    // When updating list_id, we only send that field
+    const dataToSend = updateListId ? { list_id: updates.list_id ?? null } : updates;
+    
     const response = await fetch(`${API_URL}/books/${bookId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(dataToSend),
     });
     if (!response.ok) {
         throw new Error('Failed to update book');
@@ -251,31 +254,52 @@ export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id
         list_id: updatedApiBook.list_id || undefined
     };
     
-    // Update books store
-    books.update(current => 
-        current.map(book => 
+    // Update books store first
+    books.update(currentBooks => {
+        const existingBook = currentBooks.find(b => b.id === bookId);
+        if (!existingBook) return currentBooks;
+
+        return currentBooks.map(book => 
             book.id === bookId 
-                ? updatedBook
+                ? {
+                    ...book,
+                    ...updates,
+                    list_id: updateListId ? updates.list_id : book.list_id
+                }
                 : book
-        )
-    );
-    
-    // Update lists store if book is in a list
-    if (updatedBook.list_id) {
-        lists.update(current =>
-            current.map(list =>
-                list.id === updatedBook.list_id
-                    ? {
-                        ...list,
-                        books: list.books.map(book =>
-                            book.id === bookId
-                                ? updatedBook
-                                : book
-                        )
-                    }
-                    : list
-            )
         );
+    });
+
+    // Then update lists store if needed
+    if (updateListId) {
+        lists.update(currentLists => {
+            // First remove the book from any list it might be in
+            const listsWithoutBook = currentLists.map(list => ({
+                ...list,
+                books: list.books.filter(b => b.id !== bookId)
+            }));
+
+            // If the book should be in a list, add it to that list
+            if (updates.list_id !== undefined) {
+                return listsWithoutBook.map(list => {
+                    if (list.id === updates.list_id) {
+                        const bookToAdd = currentLists
+                            .flatMap(l => l.books)
+                            .find(b => b.id === bookId);
+                        
+                        if (bookToAdd) {
+                            return {
+                                ...list,
+                                books: [...list.books, { ...bookToAdd, list_id: updates.list_id }]
+                            };
+                        }
+                    }
+                    return list;
+                });
+            }
+
+            return listsWithoutBook;
+        });
     }
     
     return updatedBook;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { lists, addBookToList, booksInList, updateBook, deleteBook } from './stores';
+    import { lists, books, addBookToList, booksInList, updateBook, deleteBook } from './stores';
     import type { BookList, Book } from './stores';
 
     export let list: BookList;
@@ -64,14 +64,13 @@
     }
 
     async function handleDelete(book: BookWithSelect) {
-        if (!confirm(`Are you sure you want to delete "${book.title}"?`)) {
-            return;
-        }
-
         try {
-            await deleteBook(book.id);
+            // Update the book to remove its list_id
+            await updateBook(book.id, {
+                list_id: undefined
+            }, true);
         } catch (e) {
-            console.error('Failed to delete book:', e);
+            console.error('Failed to remove book from list:', e);
         }
     }
 
