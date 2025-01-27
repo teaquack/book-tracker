@@ -1,0 +1,129 @@
+@use '../base/variables' as *;
+
+.lists-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  height: 100%;
+
+  section {
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: $spacing-md;
+      color: $color-text;
+    }
+  }
+}
+
+.create-list {
+  .input-group {
+    margin-bottom: $spacing-md;
+
+    input {
+      width: 100%;
+      padding: $spacing-xs;
+      border: 1px solid $color-border;
+      border-radius: $border-radius;
+      font-size: 0.9rem;
+
+      &::placeholder {
+        color: $color-text-light;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+      }
+    }
+  }
+
+  .create-button {
+    width: 100%;
+    padding: $spacing-xs;
+    background: $color-primary;
+    color: $color-text-inverse;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color $transition-speed ease;
+
+    &:hover {
+      background: $color-primary-dark;
+    }
+  }
+}
+
+.error {
+  color: $color-error;
+  margin-bottom: $spacing-xs;
+  font-size: 0.9rem;
+}
+
+.all-lists {
+  flex: 1;
+  overflow-y: auto;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  margin-bottom: $spacing-xs;
+  background: $color-background;
+  transition: border-color $transition-speed ease;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  .list-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    flex: 1;
+    min-width: 0;
+
+    .list-name {
+      font-size: 0.9rem;
+      color: $color-text;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .book-count {
+      font-size: 0.8rem;
+      color: $color-text-light;
+      padding: 0.2rem 0.5rem;
+      background: $color-background-light;
+      border-radius: $border-radius;
+      white-space: nowrap;
+    }
+  }
+
+  .delete-button {
+    background: none;
+    border: none;
+    color: $color-text-light;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    transition: color $transition-speed ease;
+
+    &:hover {
+      color: $color-error;
+    }
+  }
+}

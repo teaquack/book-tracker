@@ -37,9 +37,9 @@
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape' && showSidebar) {
-      showSidebar = false;
-      document.body.classList.remove('sidebar-open');
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleMainContentClick();
     }
   }
 </script>
@@ -66,41 +66,27 @@
       <ListsSidebar />
     </div>
 
-    <button 
-      type="button"
-      class="main-content-overlay"
+    <div 
+      class="main-content" 
       on:click={handleMainContentClick}
       on:keydown={handleKeyDown}
-      aria-label="Close menu overlay"
-      tabindex="-1"
-      style="display: {showSidebar ? 'block' : 'none'}"
-    ></button>
-
-    <main class="main-content">
+      role="button"
+      tabindex="0"
+    >
       {#if error}
         <div class="error">{error}</div>
       {/if}
       
       <div class="lists-container">
+        <UnlistedBooks />
         {#each allLists as list (list.id)}
           <BookList {list} />
         {/each}
       </div>
-    </main>
+    </div>
 
-    <aside class="right-sidebar">
+    <div class="right-sidebar">
       <AddBookForm />
-      <UnlistedBooks />
-    </aside>
+    </div>
   </div>
 </div>
-
-<svelte:head>
-  {#if showSidebar}
-    <style>
-      body {
-        overflow: hidden;
-      }
-    </style>
-  {/if}
-</svelte:head>

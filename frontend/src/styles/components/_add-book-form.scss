@@ -1,0 +1,61 @@
+@use '../base/variables' as *;
+
+.add-book-form {
+  background: $color-background;
+  padding: $spacing-md;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+
+  h2 {
+    margin: 0 0 $spacing-md 0;
+    color: $color-text;
+  }
+}
+
+.form-group {
+  margin-bottom: $spacing-md;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    color: $color-text-light;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: $spacing-xs;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+    }
+  }
+}
+
+.error {
+  color: $color-error;
+  background: $color-error-bg;
+  padding: $spacing-xs;
+  border-radius: $border-radius;
+  margin-bottom: $spacing-md;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: $spacing-sm;
+  background: $color-primary;
+  color: $color-text-inverse;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color $transition-speed ease;
+
+  &:hover {
+    background: $color-primary-dark;
+  }
+}
