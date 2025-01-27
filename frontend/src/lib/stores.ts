@@ -190,39 +190,48 @@ export async function addBookToList(listId: number, bookId: number): Promise<Boo
     }
     const updatedApiList: ApiBookList = await response.json();
     
-    // Convert API books to our Book type
-    const updatedBooks = updatedApiList.books.map(book => ({
-        ...book,
-        list_id: book.list_id || undefined
-    }));
-    
-    const updatedList: BookList = {
-        ...updatedApiList,
-        books: updatedBooks
-    };
-    
-    // Update the book's list_id in the books store
-    books.update(current => 
-        current.map(book => 
-            book.id === bookId 
+    // First update the books store to reflect the new list_id
+    books.update(currentBooks => 
+        currentBooks.map(book => 
+            book.id === bookId
                 ? { ...book, list_id: listId }
                 : book
         )
     );
     
-    // Update the lists store
-    lists.update(current => 
-        current.map(list => 
-            list.id === listId 
-                ? updatedList
-                : {
+    // Then update the lists store
+    lists.update(currentLists => {
+        // Remove the book from its current list (if any)
+        const listsWithoutBook = currentLists.map(list => ({
+            ...list,
+            books: list.books.filter(book => book.id !== bookId)
+        }));
+        
+        // Add the book to its new list
+        return listsWithoutBook.map(list => 
+            list.id === listId
+                ? {
                     ...list,
-                    books: list.books.filter(book => book.id !== bookId)
+                    books: [...list.books, currentLists
+                        .flatMap(l => l.books)
+                        .find(b => b.id === bookId)!
+                    ]
                 }
-        )
-    );
-    
-    return updatedList;
+                : list
+        );
+    });
+
+    // Convert ApiBookList to BookList before returning
+    const convertedList: BookList = {
+        id: updatedApiList.id,
+        name: updatedApiList.name,
+        books: updatedApiList.books.map(book => ({
+            ...book,
+            list_id: book.list_id || undefined
+        }))
+    };
+
+    return convertedList;
 }
 
 export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id' | 'list_id'>>): Promise<Book> {
