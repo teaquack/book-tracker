@@ -1,18 +1,18 @@
 // Colors
-$color-primary: #4299e1;
-$color-primary-dark: #3182ce;
+$color-primary: #3498db;
+$color-primary-dark: #2980b9;
 $color-text: #2c3e50;
 $color-text-light: #666;
 $color-text-inverse: #ffffff;
-$color-border: #cbd5e0;
-$color-highlight: goldenrod;
-$color-error: #c53030;
-$color-error-bg: #fed7d7;
+$color-border: #e0e0e0;
+$color-highlight: #f1c40f;
+$color-error: #e74c3c;
+$color-error-bg: #fde8e7;
 $color-success: #2ecc71;
 $color-success-dark: #27ae60;
 $color-background: #ffffff;
 $color-background-light: #f8f9fa;
-$color-background-card: #f8f9fa;
+$color-background-card: #ffffff;
 
 // Spacing
 $spacing-xs: 0.5rem;
@@ -25,8 +25,15 @@ $border-radius: 4px;
 $border-radius-lg: 8px;
 
 // Shadows
-$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
 $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 
 // Transitions
 $transition-speed: 0.2s;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1200px;
