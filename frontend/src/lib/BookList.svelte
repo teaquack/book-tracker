@@ -18,16 +18,36 @@
     let editTitle = '';
     let editAuthor = '';
     let editDescription = '';
+    let error = '';
 
     function startEdit(book: BookWithSelect) {
         editingId = book.id;
         editTitle = book.title;
         editAuthor = book.author;
         editDescription = book.description || '';
+        error = '';
     }
 
     function cancelEdit() {
         editingId = null;
+        error = '';
+    }
+
+    async function saveEdit() {
+        if (editingId === null) return;
+
+        try {
+            error = '';
+            await updateBook(editingId, {
+                title: editTitle,
+                author: editAuthor,
+                description: editDescription
+            });
+            editingId = null;
+        } catch (e) {
+            error = 'Failed to update book. Please try again.';
+            console.error('Failed to update book:', e);
+        }
     }
 
     async function moveToList(bookId: number, select: HTMLSelectElement) {
@@ -41,35 +61,24 @@
         }
 
         try {
+            error = '';
             await addBookToList(targetListId, bookId);
             select.value = ''; // Reset the select after moving
         } catch (e) {
+            error = 'Failed to move book to list. Please try again.';
             console.error('Failed to move book to list:', e);
-        }
-    }
-
-    async function saveEdit() {
-        if (editingId === null) return;
-
-        try {
-            await updateBook(editingId, {
-                title: editTitle,
-                author: editAuthor,
-                description: editDescription
-            });
-            editingId = null;
-        } catch (e) {
-            console.error('Failed to update book:', e);
         }
     }
 
     async function handleDelete(book: BookWithSelect) {
         try {
+            error = '';
             // Update the book to remove its list_id
             await updateBook(book.id, {
                 list_id: undefined
             }, true);
         } catch (e) {
+            error = 'Failed to remove book from list. Please try again.';
             console.error('Failed to remove book from list:', e);
         }
     }
@@ -100,6 +109,9 @@
 <div class="book-list">
     <div class="container">
         <h2>{list.name}</h2>
+        {#if error}
+            <div class="error">{error}</div>
+        {/if}
         <div class="books-grid">
             {#if booksWithSelect.length === 0}
                 <p class="empty">No books in this list</p>

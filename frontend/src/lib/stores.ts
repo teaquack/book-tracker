@@ -246,7 +246,7 @@ export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id
         body: JSON.stringify(dataToSend),
     });
     if (!response.ok) {
-        throw new Error('Failed to update book');
+        throw new Error(`Failed to update book: ${response.statusText}`);
     }
     const updatedApiBook: ApiBook = await response.json();
     const updatedBook: Book = {
@@ -257,7 +257,10 @@ export async function updateBook(bookId: number, updates: Partial<Omit<Book, 'id
     // Update books store first
     books.update(currentBooks => {
         const existingBook = currentBooks.find(b => b.id === bookId);
-        if (!existingBook) return currentBooks;
+        if (!existingBook) {
+            console.warn(`Book ${bookId} not found in books store`);
+            return currentBooks;
+        }
 
         return currentBooks.map(book => 
             book.id === bookId 

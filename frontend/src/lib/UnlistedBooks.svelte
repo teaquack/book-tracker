@@ -39,7 +39,7 @@
     }
 
     async function handleDelete(book: Book) {
-        if (!confirm(`Are you sure you want to delete "${book.title}"?`)) {
+        if (!confirm(`Are you sure you want to permanently delete "${book.title}"? This cannot be undone.`)) {
             return;
         }
 
