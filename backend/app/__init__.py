@@ -1,7 +1,7 @@
 from flask import Flask
 import os
 from app.extensions import db, cors
-from app.routes import book_routes, list_routes
+from app.routes import book_routes, list_routes, tags
 
 def create_app():
     app = Flask(__name__)
@@ -23,5 +23,6 @@ def create_app():
     # Register blueprints
     app.register_blueprint(book_routes.bp)
     app.register_blueprint(list_routes.bp)
+    app.register_blueprint(tags.bp)
 
     return app
